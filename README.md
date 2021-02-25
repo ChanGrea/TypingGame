@@ -21,22 +21,26 @@
 ├── README.md
 ├── package-lock.json
 ├── package.json
-├── public							# 빌드 결과물
+├── public
 │   ├── index.css
 │   ├── index.css.map
 │   ├── index.html
 │   ├── main.js
 │   └── main.js.map
-├── src									# 소스 폴더
-│   ├── func.js					# 주요 기능 함수 분리
-│   ├── func.test.js		# 주요 기능 함수에 대한 테스트 코드
-│   ├── game.js					# 게임 화면(컴포넌트)
-│   ├── index.css				# 스타일
+├── src
+│   ├── index.css
 │   ├── index.html
-│   ├── index.js				# entry point
-│   ├── result.js				# 결과 화면(컴포넌트)
-│   └── router.js				# 라우팅
-└── webpack.config.js		# webpack 설정
+│   ├── index.js
+│   ├── js
+│   │   ├── game.js
+│   │   ├── game.test.js
+│   │   ├── result.js
+│   │   └── result.test.js
+│   ├── page
+│   │   ├── game.js
+│   │   └── result.js
+│   └── router.js
+└── webpack.config.js
 ```
 
 
