@@ -1,15 +1,16 @@
 /*
  * 라우팅 모듈
  */
-import { resultTemplate } from "./result.js";
-import { game } from "./game.js";
+import { result } from "./page/result.js";
+import { game } from "./page/game.js";
 
 /* Routing Path
  * [path: component] 형태
  */
 export const routes = {
+  "/public/index.html": game, // for Build
   "/": game,
-  "/result": resultTemplate
+  "/result": result
 };
 
 // Routing Root

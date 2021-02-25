@@ -8655,162 +8655,9 @@ module.exports = function (it, key) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(308);
 /* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(311);
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
-
-
-var _require = __webpack_require__(314),
-    getScore = _require.getScore,
-    checkAnswer = _require.checkAnswer,
-    getAvgTime = _require.getAvgTime; // build 결과물 실행 route 처리 용도 <-- start
-
-
-var rootPath = window.location.pathname;
-
-if (rootPath.indexOf("/public") >= 0) {
-  rootPath = "/";
-} // build 결과물 실행 route 처리 용도 --> end
-
-
-_router_js__WEBPACK_IMPORTED_MODULE_1__.rootDiv.innerHTML = _router_js__WEBPACK_IMPORTED_MODULE_1__.routes[rootPath]();
-var data = null,
-    timer = null,
-    responseTime = 0,
-    totalTime = 0;
-var startButton = document.getElementById("startBtn"); // '시작' 버튼
-
-var answerInput = document.getElementById("answerInput"); // '입력' 영역
-
-var time = document.getElementById("time"); // '남은 시간' 영역
-
-var score = document.getElementById("score"); // '점수' 영역
-
-var question = document.getElementById("question"); // '문제 단어' 영역
-// 화면 로딩 시, 단어 데이터 요청
-
-window.onload = function () {
-  getData().then(function (result) {
-    data = result;
-  });
-}; // 서버로부터 데이터를 가져와서 local에 셋팅
-
-
-var getData = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var response, json;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return fetch("https://my-json-server.typicode.com/kakaopay-fe/resources/words");
-
-          case 2:
-            response = _context.sent;
-            _context.next = 5;
-            return response.json();
-
-          case 5:
-            json = _context.sent;
-            return _context.abrupt("return", json);
-
-          case 7:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-
-  return function getData() {
-    return _ref.apply(this, arguments);
-  };
-}(); // '시작'버튼 이벤트 핸들링
-
-
-startButton.addEventListener("click", function () {
-  if (startButton.innerText === "초기화") {
-    init();
-  } else {
-    start();
-  }
-}); // '입력' 영역 이벤트 핸들링
-
-answerInput.addEventListener("keypress", function (e) {
-  // 엔터 키 입력 시
-  if (e.key === "Enter") {
-    var userInput = answerInput.value;
-    var isAnswer = checkAnswer(question.innerText, userInput); // 정답일 경우, 점수를 얻고 다음 문제로 넘어간다.
-
-    if (isAnswer) {
-      score.innerText = getScore(parseInt(score.innerText), 1);
-      totalTime += responseTime;
-      nextQuestion();
-    }
-
-    answerInput.value = "";
-  }
-}); // '초기화' 기능
-
-var init = function init() {
-  if (timer) clearInterval(timer);
-  time.innerText = 0;
-  score.innerText = 0;
-  question.innerText = "문제 단어";
-  answerInput.value = "";
-  answerInput.readOnly = true;
-  startButton.innerText = "시작";
-}; // '시작' 기능
-
-
-var start = function start() {
-  answerInput.readOnly = false;
-  answerInput.focus();
-  startButton.innerText = "초기화";
-  nextQuestion();
-}; // 다음 문제로 넘어가는 기능
-
-
-var nextQuestion = function nextQuestion() {
-  if (timer) clearInterval(timer); // 남은 단어 데이터가 없다면 결과 화면으로 라우팅
-
-  if (!data || data.length <= 0) {
-    var avgTime = getAvgTime(totalTime, parseInt(score.innerText)).toFixed(2); // 데이터와 함계 결과 화면으로 라우팅
-
-    (0,_router_js__WEBPACK_IMPORTED_MODULE_1__.onNavigate)("/result", {
-      score: score.innerText,
-      avgTime: avgTime
-    }); // 결과 화면에서 '초기화' 버튼에 대한 이벤트 핸들링
-
-    document.getElementById("retryButton").onclick = function () {
-      (0,_router_js__WEBPACK_IMPORTED_MODULE_1__.onNavigate)("/", null);
-    };
-  } else {
-    // 요청 받은 단어 데이터 하나씩 꺼내서 수행
-    var _data$shift = data.shift(),
-        second = _data$shift.second,
-        text = _data$shift.text; // 각 데이터 셋팅
-
-
-    time.innerText = second;
-    question.innerText = text;
-    responseTime = 0; // '남은 시간' 영역의 타이머 역할
-
-    timer = setInterval(function () {
-      time.innerText -= 1;
-      responseTime += 1; // 시간이 0초가 되면 종료 후 다음 문제로 넘어간다.
-
-      if (time.innerText === 0 || time.innerText === "0") {
-        clearInterval(timer);
-        score.innerText = getScore(parseInt(score.innerText), -1);
-        nextQuestion();
-      }
-    }, 1000);
-  }
-};
+_router_js__WEBPACK_IMPORTED_MODULE_1__.rootDiv.innerHTML = _router_js__WEBPACK_IMPORTED_MODULE_1__.routes[window.location.pathname]();
 
 /***/ }),
 /* 308 */
@@ -8821,7 +8668,7 @@ __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1606142674670
+      // 1614281088987
       var cssReload = __webpack_require__(309)(module.id, {"locals":false});
       module.hot.dispose(cssReload);
       module.hot.accept(undefined, cssReload);
@@ -9099,8 +8946,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "rootDiv": () => /* binding */ rootDiv,
 /* harmony export */   "onNavigate": () => /* binding */ onNavigate
 /* harmony export */ });
-/* harmony import */ var _result_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(312);
-/* harmony import */ var _game_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(313);
+/* harmony import */ var _page_result_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(312);
+/* harmony import */ var _page_game_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(313);
 /*
  * 라우팅 모듈
  */
@@ -9111,8 +8958,10 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 var routes = {
-  "/": _game_js__WEBPACK_IMPORTED_MODULE_1__.game,
-  "/result": _result_js__WEBPACK_IMPORTED_MODULE_0__.resultTemplate
+  "/public/index.html": _page_game_js__WEBPACK_IMPORTED_MODULE_1__.game,
+  // for Build
+  "/": _page_game_js__WEBPACK_IMPORTED_MODULE_1__.game,
+  "/result": _page_result_js__WEBPACK_IMPORTED_MODULE_0__.result
 }; // Routing Root
 
 var rootDiv = document.getElementById("root"); // Routing Function
@@ -9129,13 +8978,20 @@ var onNavigate = function onNavigate(pathname, data) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "resultTemplate": () => /* binding */ resultTemplate
+/* harmony export */   "result": () => /* binding */ result
 /* harmony export */ });
+/* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(311);
+
 /*
  * 결과 화면
  */
-var resultTemplate = function resultTemplate(model) {
-  return "\n    <div class=\"block notice-area\">\n        Mission Complete!\n    </div>\n    <div class=\"block result__score-area\">\n        \uB2F9\uC2E0\uC758 \uC810\uC218\uB294 <span>\xA0".concat(model.score, "</span>\uC810\uC785\uB2C8\uB2E4.\n    </div>\n    <div class=\"block result__time-area\">\n        \uB2E8\uC5B4\uB2F9 \uD3C9\uADE0 \uB2F5\uBCC0 \uC2DC\uAC04\uC740 <span>\xA0").concat(model.avgTime, "</span>\uCD08\uC785\uB2C8\uB2E4.\n    </div>\n    <div id=\"retryButton\" class=\"block button-area\">\n        \uB2E4\uC2DC \uC2DC\uC791\n    </div>\n");
+
+var result = function result(model) {
+  window.retryButtonClickListener = function () {
+    (0,_router_js__WEBPACK_IMPORTED_MODULE_0__.onNavigate)("/", null);
+  };
+
+  return "\n    <div class=\"block notice-area\">\n        Mission Complete!\n    </div>\n    <div class=\"block result__score-area\">\n        \uB2F9\uC2E0\uC758 \uC810\uC218\uB294 <span>\xA0".concat(model.score, "</span>\uC810\uC785\uB2C8\uB2E4.\n    </div>\n    <div class=\"block result__time-area\">\n        \uB2E8\uC5B4\uB2F9 \uD3C9\uADE0 \uB2F5\uBCC0 \uC2DC\uAC04\uC740 <span>\xA0").concat(model.avgTime, "</span>\uCD08\uC785\uB2C8\uB2E4.\n    </div>\n    <div id=\"retryButton\" class=\"block button-area\" onclick={retryButtonClickListener()}>\n        \uB2E4\uC2DC \uC2DC\uC791\n    </div>\n");
 };
 
 /***/ }),
@@ -9147,36 +9003,184 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "game": () => /* binding */ game
 /* harmony export */ });
+/* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(311);
+var _require = __webpack_require__(314),
+    getScore = _require.getScore,
+    getData = _require.getData;
+
+var _require2 = __webpack_require__(315),
+    checkAnswer = _require2.checkAnswer,
+    getAvgTime = _require2.getAvgTime;
+
+
 /*
  * 게임화면
  */
+
 var game = function game() {
-  return "\n    <div class=\"block notice-area\">\n        <div class=\"notice-area__left\">\n            \uB0A8\uC740\uC2DC\uAC04: <span id=\"time\">0</span>\uCD08\n        </div>\n        <div class=\"notice-area__right\">\uC810\uC218: <span id=\"score\">0</span>\uC810</div>\n    </div>\n    <div class=\"block question-area\"><span id=\"question\">\uBB38\uC81C \uB2E8\uC5B4</span></div>\n    <div class=\"block input-area\">\n        <input\n            type=\"text\"\n            id=\"answerInput\"\n            class=\"input\"\n            placeholder=\"\uC785\uB825\"\n            readonly\n        />\n    </div>\n    <div class=\"block button-area\" id=\"startBtn\">\n        \uC2DC\uC791\n    </div>\n";
+  var data = null,
+      timer = null,
+      responseTime = 0,
+      totalTime = 0,
+      inProgress = false;
+
+  window.startBtnClickListener = function () {
+    var startButton = document.getElementById("startBtn");
+    var answerInput = document.getElementById("answerInput");
+    var time = document.getElementById("time");
+    var score = document.getElementById("score");
+    var question = document.getElementById("question");
+    startButton.innerText = inProgress ? "시작" : "초기화";
+    answerInput.value = inProgress ? "" : answerInput.value;
+    answerInput.readOnly = inProgress;
+    time.innerText = inProgress ? 0 : time.innerText;
+    score.innerText = inProgress ? 0 : score.innerText;
+    question.innerText = inProgress ? "문제 단어" : question.innerText;
+
+    if (inProgress) {
+      inProgress = false;
+      if (timer) clearInterval(timer);
+    } else {
+      inProgress = true;
+      answerInput.focus();
+      nextQuestion();
+    }
+  };
+
+  window.answerInputListener = function () {
+    var answerInput = document.getElementById("answerInput");
+    var score = document.getElementById("score");
+    var question = document.getElementById("question"); // 엔터 키 입력 시
+
+    if (event.key === "Enter") {
+      var userInput = answerInput.value;
+      var isAnswer = checkAnswer(question.innerText, userInput); // 정답일 경우, 점수를 얻고 다음 문제로 넘어간다.
+
+      if (isAnswer) {
+        score.innerText = getScore(parseInt(score.innerText), 1);
+        totalTime += responseTime;
+        nextQuestion();
+      }
+
+      answerInput.value = "";
+    }
+  }; // 다음 문제로 넘어가는 기능
+
+
+  var nextQuestion = function nextQuestion() {
+    var time = document.getElementById("time");
+    var score = document.getElementById("score");
+    var question = document.getElementById("question");
+    if (timer) clearInterval(timer); // 남은 단어 데이터가 없다면 결과 화면으로 라우팅
+
+    if (!data || data.length <= 0) {
+      var _score = parseInt(score.innerText);
+
+      var avgTime = getAvgTime(totalTime, _score).toFixed(2); // 데이터와 함계 결과 화면으로 라우팅
+
+      (0,_router_js__WEBPACK_IMPORTED_MODULE_0__.onNavigate)("/result", {
+        score: score.innerText,
+        avgTime: avgTime
+      });
+      inProgress = false;
+    } else {
+      // 요청 받은 단어 데이터 하나씩 꺼내서 수행
+      var _data$shift = data.shift(),
+          second = _data$shift.second,
+          text = _data$shift.text; // 각 데이터 셋팅
+
+
+      time.innerText = second;
+      question.innerText = text;
+      responseTime = 0; // '남은 시간' 영역의 타이머 역할
+
+      timer = setInterval(function () {
+        time.innerText -= 1;
+        responseTime += 1; // 시간이 0초가 되면 종료 후 다음 문제로 넘어간다.
+
+        if (time.innerText === 0 || time.innerText === "0") {
+          clearInterval(timer);
+          score.innerText = getScore(parseInt(score.innerText), -1);
+          nextQuestion();
+        }
+      }, 1000);
+    }
+  };
+
+  getData().then(function (result) {
+    data = result;
+  });
+  return "\n        <div class=\"block notice-area\">\n            <div class=\"notice-area__left\">\n                \uB0A8\uC740\uC2DC\uAC04: <span id=\"time\">0</span>\uCD08\n            </div>\n            <div class=\"notice-area__right\">\uC810\uC218: <span id=\"score\">0</span>\uC810</div>\n        </div>\n        <div class=\"block question-area\"><span id=\"question\">\uBB38\uC81C \uB2E8\uC5B4</span></div>\n        <div class=\"block input-area\">\n            <input\n                type=\"text\"\n                id=\"answerInput\"\n                class=\"input\"\n                placeholder=\"\uC785\uB825\"\n                readonly\n                onkeypress={answerInputListener()}\n            />\n        </div>\n        <div class=\"block button-area\" id=\"startBtn\" onclick={startBtnClickListener()}>\n            \uC2DC\uC791\n        </div>\n    ";
 };
 
 /***/ }),
 /* 314 */
-/***/ ((module) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getScore": () => /* binding */ getScore,
+/* harmony export */   "getData": () => /* binding */ getData
+/* harmony export */ });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+// 점수 셋팅 함수
+var getScore = function getScore(curScore, value) {
+  return curScore + value;
+}; // 서버로부터 데이터를 가져와서 local에 셋팅
+
+var getData = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var response, json;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return fetch("https://my-json-server.typicode.com/kakaopay-fe/resources/words");
+
+          case 2:
+            response = _context.sent;
+            _context.next = 5;
+            return response.json();
+
+          case 5:
+            json = _context.sent;
+            return _context.abrupt("return", json);
+
+          case 7:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function getData() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/***/ }),
+/* 315 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "checkAnswer": () => /* binding */ checkAnswer,
+/* harmony export */   "getAvgTime": () => /* binding */ getAvgTime
+/* harmony export */ });
 // 정답 판별 함수
 var checkAnswer = function checkAnswer(question, userInput) {
   return question === userInput;
-}; // 점수 셋팅 함수
-
-
-var getScore = function getScore(curScore, value) {
-  return curScore + value;
 }; // 평균 입력 시간 반환 함수
-
 
 var getAvgTime = function getAvgTime(totalTime, totalAnswer) {
   return totalTime / totalAnswer;
-};
-
-module.exports = {
-  getScore: getScore,
-  checkAnswer: checkAnswer,
-  getAvgTime: getAvgTime
 };
 
 /***/ })
@@ -9255,7 +9259,7 @@ module.exports = {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => "a294567dc80a55b40f34"
+/******/ 		__webpack_require__.h = () => "9a46d80eebdbd8181a1f"
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
